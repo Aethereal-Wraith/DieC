@@ -27,7 +27,7 @@ int rollDie(const int numberOfFaces) {
 
 int rollAdvDie(const int firstRoll, const int secondRoll, const int isDisAdv) {
     if (isDisAdv) {
-        return (firstRoll < secondRoll ? firstRoll : secondRoll);
+        return firstRoll < secondRoll ? firstRoll : secondRoll;
     }
     else {
         return firstRoll > secondRoll ? firstRoll : secondRoll;
