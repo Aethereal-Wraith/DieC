@@ -1,20 +1,38 @@
-VERSION := c99
+GCC99 := gcc -std=c99
+
+###
 
 all: diec, test, libdiec, scratch
 
-diec: DieC.o
+###
 
-src: main.o CLI.o rollDice.o
+diec: main.o src.o src.l
+
+libdiec.h: src.l
+
+src.c: CLI.o rollDice.o
+
+src.l: CLI.l rollDice.l
+
 
 main.o:
-	gcc -c main.c
+	{$GCC99} -c main.c -o main.o
 CLI.o:
-	gcc -c CLI.c
+	{$GCC99} -c CLI.c -o cli.o
 rollDice.o:
-	gcc -c rollDice.c
+	{$GCC99} -c rollDice.c -o rollDice.o
+
+###
+
+test: test_rollDice.o
+
+test_rollDice.o: rollDice.l
+	{$GCC99}
+
+###
 
 scratch:
-	gcc -std=c99 scratchpad.c -o scratch
+	{$GCC99} scratchpad.c -o scratch
 	./scratch
 	rm scratch
 
