@@ -1,38 +1,44 @@
-GCC99 := gcc -std=c99
+BINS := diec libdiec test_diec scratch
+CC := clang ${CFLAGS}
+CFLAGS := -std=c99 -Wall -Werror
+OBJECTS := src.o Dice.o randDice.o rollDice.o
 
 ###
 
-all: diec, test, libdiec, scratch
+all: ${BINS}
 
-###
-
-diec: main.o src.o src.l
-
-libdiec.h: src.l
-
-src.c: CLI.o rollDice.o
-
-src.l: CLI.l rollDice.l
-
-
-main.o:
-	{$GCC99} -c main.c -o main.o
-CLI.o:
-	{$GCC99} -c CLI.c -o cli.o
-rollDice.o:
-	{$GCC99} -c rollDice.c -o rollDice.o
-
-###
-
-test: test_rollDice.o
-
-test_rollDice.o: rollDice.l
-	{$GCC99}
-
-###
+clean:
+	rm -rf ${BINS} ${OBJECTS}
 
 scratch:
-	{$GCC99} scratchpad.c -o scratch
+	${CC} scratchpad.c -o scratch
 	./scratch
-	rm scratch
+
+### NOTE: Program Sources
+
+src.o: Dice.o randDice.o rollDice.o
+	ld -o src.o -r Dice.o randDice.o rollDice.o
+
+Dice.o:
+	${CC} -o Dice.o -c src/Dice.c src/Dice.h
+
+randDice.o:
+	${CC} -o randDice.o -c src/randDice.c src/randDice.h
+
+rollDice.o:
+	${CC} -o rollDice.o -c src/rollDice.c src/rollDice.h
+
+### NOTE: Dynamic Library
+
+libdiec: src.so
+
+### NOTE: CLI
+
+diec: src.o CLI.o
+
+CLI.o:
+
+### NOTE: Unit Tests
+
+test_diec:
 
