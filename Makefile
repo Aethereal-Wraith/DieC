@@ -1,44 +1,32 @@
-BINS := diec libdiec test_diec scratch
-CC := clang ${CFLAGS}
+EXEC: diec
+LIB: libdiec
+
+BUILD-DIR := ./build
+CC := clang $(CFLAGS)
 CFLAGS := -std=c99 -Wall -Werror
-OBJECTS := src.o Dice.o randDice.o rollDice.o
+CCTEST := $(CC) -g -Og
 
-###
+.PHONY: install lib all clean scratch
 
-all: ${BINS}
+install: $(EXEC)
 
-clean:
-	rm -rf ${BINS} ${OBJECTS}
+lib: $(LIB)
+
+all: $(EXEC) $(LIB) test scratch clean
+
+test: rollDice_test.o
+	$(CCTEST) -o test rollDice_test.o
+	./test
 
 scratch:
-	${CC} scratchpad.c -o scratch
-	./scratch
+	$(CC) scratchpad.c -o scratchpad
+	./scratchpad
 
-### NOTE: Program Sources
+clean:
+	rm -rf build
 
-src.o: Dice.o randDice.o rollDice.o
-	ld -o src.o -r Dice.o randDice.o rollDice.o
+rollDice_test.o: rollDice.o
+	$(CC) -o rollDice_test.o ./rollDice.o
 
-Dice.o:
-	${CC} -o Dice.o -c src/Dice.c src/Dice.h
-
-randDice.o:
-	${CC} -o randDice.o -c src/randDice.c src/randDice.h
-
-rollDice.o:
-	${CC} -o rollDice.o -c src/rollDice.c src/rollDice.h
-
-### NOTE: Dynamic Library
-
-libdiec: src.so
-
-### NOTE: CLI
-
-diec: src.o CLI.o
-
-CLI.o:
-
-### NOTE: Unit Tests
-
-test_diec:
+rollDice.o
 
