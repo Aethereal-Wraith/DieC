@@ -29,3 +29,7 @@ int randInt(const int inclusiveMin, const int exclusiveMax) {
 	return restrictDomain(randNum, inclusiveMin, exclusiveMax);
 }
 
+uint16_t randuint16_t(const uint16_t inclusiveMin, const uint16_t exclusiveMax) {
+	return (uint16_t)randInt((int)inclusiveMin, exclusiveMax);
+}
+

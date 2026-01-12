@@ -1,3 +1,7 @@
+#ifndef DICE_HEADER
+	// include guard
+#define DICE_HEADER
+
 #include <stdint.h>
 
 typedef struct Die {
@@ -13,3 +17,5 @@ typedef struct rollFlags {
 	uint8_t modifiers : 4;
 } rollFlags;
 
+#endif	// #ifndef DICE_HEADER
+	// end include guard
